@@ -5,7 +5,7 @@ class TokboxController < ApplicationController
     @tok_token = params[:token]
     @course_topic_duration=params[:duration]
     @course_name=params[:course]
-    @user_display_name="params[:user]"
+    @user_display_name=params[:user]
     @course_topic_course_content="params[:course_topic]"
   end
   def student_room
