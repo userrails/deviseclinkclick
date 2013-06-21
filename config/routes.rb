@@ -3,6 +3,7 @@ TokboxApp::Application.routes.draw do
     collection do
       get :mentor_room
       get :student_room
+      get :screen_share
     end
   end
   # The priority is based upon order of creation:

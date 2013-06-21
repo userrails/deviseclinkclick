@@ -78,7 +78,25 @@
     </script>
   </head>
   <body>
-    <div id="time_display">Duration: <%= @course_topic_duration %></div>
+    <div id="time_display">Duration: <%= @course_topic_duration %> hrs</div>
+<div style="height: auto;
+    left: 803px;
+    position: absolute;
+    top: 146px;
+    width: 533px;">
+<%= link_to "Share the screen",screen_share_tokbox_index_path,:remote=>true,:id=>"screen",:style=>"color:#0D5A75;font-size:17px;"%></div>
+<script type="text/javascript">
+$('#screen').click(function(){
+$.ajax({
+  url:"/tokbox/screen_share",
+  method:'GET',
+  success:function(data){
+$('#screen').html(data);
+
+}
+});
+});
+</script>
     <div id="main_menu">
       <div id="left_corner"></div>
       <div id="mid_bg">

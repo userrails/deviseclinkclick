@@ -10,7 +10,9 @@ end
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-#gem 'sqlite3'
+gem 'mysql2'
+gem 'typhoeus','~> 0.5.3'
+
 
 
 # Gems used only for assets and not required
