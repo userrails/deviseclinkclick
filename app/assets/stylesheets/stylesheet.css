@@ -534,9 +534,9 @@ a{text-decoration:none; cursor: pointer;}
 
 /*button */
 #update_settings_button{margin-top:20px;display:block;}
-.button_left{width:9px;height:35px;background:url(/images/images/button_left.png);display:block;float:left;}
-.button_mid{height:35px;background:url(/images/images/button_mid.png);display:block;float:left;font-family:Arial, Helvetica, sans-serif;font-weight:bold;font-size:13px;color:#434243;line-height:35px;padding:0 20px;}
-.button_right{width:9px;height:35px;background:url(/images/images/button_right.png);display:block;float:left;}
+.button_left{width:9px;height:35px;background:url(/assets/button_left.png);display:block;float:left;}
+.button_mid{height:35px;background:url(/assets/button_mid.png);display:block;float:left;font-family:Arial, Helvetica, sans-serif;font-weight:bold;font-size:13px;color:#434243;line-height:35px;padding:0 20px;}
+.button_right{width:9px;height:35px;background:url(/assets/button_right.png);display:block;float:left;}
 /*button end*/
 
 
@@ -1162,7 +1162,7 @@ tr.table_heading td{border-top:1px solid #bfbfc0;}
 #learner_view #scrollbar1 .viewport {width:275px;}
 #learner_view #scrollbar1{float:left;}
 #course_view{float:left;
-             width: 70%;text-align:center;}
+             width:50%;text-align:center;}
 #course_view img{vertical-align:middle;}
 
 #end_btn_holder{margin-left: 125px;
