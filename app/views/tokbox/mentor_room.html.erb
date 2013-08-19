@@ -3,6 +3,7 @@
   <head>
     <title>OpenTok Getting Started</title>
     <%= javascript_include_tag 'http://staging.tokbox.com/v0.91/js/TB.min.js' %>
+    <%= javascript_include_tag 'application','http://staging.tokbox.com/v0.91/js/TB.min.js',"jquery.tinyscrollbar.min" %>
     <script type="text/javascript">
       var apiKey = <%= OPEN_TOK_API_KEY %>;
       var sessionId = "<%= @tok_session_id %>";
@@ -11,16 +12,17 @@
       if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
         alert('Minimum System Requirements not met!');
       }
-
       var session = TB.initSession(sessionId);
       session.addEventListener('sessionConnected', sessionConnectedHandler);
       session.addEventListener('streamCreated', streamCreatedHandler);
-      session.connect(apiKey, token);
 
+      session.connect(apiKey, token);
+      var publisher
 
       function sessionConnectedHandler(event) {
-        var publisher = TB.initPublisher(apiKey, 'myPublisherDiv', {width: 575, height: 475}, {wmode: 'window'});
+        publisher = TB.initPublisher(apiKey, 'myPublisherDiv', {width: 575, height: 475}, {wmode: 'window'});
         session.publish(publisher);
+        publisher.addEventListener("settingsButtonClick", settingsButtonClickHandler);
         publisher.addEventListener("resize", publisherResizeHandler);
 
         function publisherResizeHandler(event) {
@@ -49,6 +51,24 @@
         }
         // Subscribe to streams that were in the session when we connected
         subscribeToStreams(event.streams);
+      }
+
+      function unpublsh() {
+        session.unpublish(publisher);
+        alert(" Your has been ende");
+      }
+
+      function settingsButtonClickHandler() {
+        var newDiv = document.createElement("div");
+        newDiv.id = "devicePanel";
+        document.getElementById("devicePanelContainer").appendChild(newDiv);
+        devicePanel = deviceManager.displayPanel("devicePanel", publisher);
+        devicePanel.addEventListener("devicesSelected", devicesSelectedHandler);
+        document.getElementById("closeButton").style.visibility = "visible";
+      }
+      function closePanel() {
+        deviceManager.removePanel(devicePanel);
+        document.getElementById("closeButton").style.visibility = "hidden";
       }
 
       function streamCreatedHandler(event) {
@@ -102,7 +122,7 @@
       <div id="mid_bg">
         <span  id="main_menu_active" style="color:#89440c;font-size: 22px;"><%= @course_name%></span>
         <span id="course_by"><span class="live_by">Live by:</span><span class="mentor_name"><%= @user_display_name %></span></span>
-        <span id="current_topic">Current topic:<%= @course_topic_course_content %></span>
+        <span id="current_topic"><span class="live_by">Current topic:</span><%= @course_topic_course_content %></span>
       </div>
       <div id="right_corner"></div>
     </div>
@@ -269,30 +289,33 @@
         <div id="course_live">
           <div id="myPublisherDiv" >
           </div>
-<%#*<div class="overlay transparent"></div>%>
-<%#*<div id="end_session-modal" class="shadow" style="position: fixed;z-index: 4000;">%>
-<%#= form_tag session_info_submit_course_course_topic_path(:account_id=>current_user.account_id,:course_id=>@course,:id=>@course_topic),:method =>:put,:remote =>true %>
-<%#*<div id="break_session">%>
-<%#= radio_button_tag(:session_status,"session_break") %>
-<%#*<span class="text_for_session">Break Session</span>%>
-<%#*</div>%>
-<%#*<div id="session_finished">%>
-<%#= radio_button_tag(:session_status,"session_end") %>
-<%#*<span class="text_for_session">Session Finished</span>%>
-<%#*</div>%>
-<%#*<div class="session_popup_buttons">%>
-<%#*<button id="end_ok_button" type="submit" style="background:none;border: none;">%>
-<%#*<span class="button_left"></span>%>
-<%#*<span class="button_mid">Ok</span>%>
-<%#*<span class="button_right"></span>%>
-<%#*</button>%>
-<%#*<a class="allbutton" id="end_cancel_button" >%>
-<%#*<span class="button_left"></span>%>
-<%#*<span class="button_mid">Cancel</span>%>
-<%#*<span class="button_right"></span>%>
-<%#*</a>%>
-<%#*</div>%>
-<%#*</div>%>
+          <div class="overlay transparent"></div>
+          <%= form_tag send_live_session_status_tokbox_index_path,:remote =>true,:method =>"get" do %>
+            <div id="end_session-modal" class="shadow" style="position: fixed;z-index: 4000;">
+              <%= hidden_field_tag :course,@course_id %>
+              <%= hidden_field_tag :course_topic,@course_topic_id %>
+              <div id="break_session">
+                <%= radio_button_tag(:session_status,"session_break") %>
+                <span class="text_for_session">Break Session</span>
+              </div>
+              <div id="session_finished">
+                <%= radio_button_tag(:session_status,"session_end") %>
+                <span class="text_for_session">Session Finished</span>
+              </div>
+              <div class="session_popup_buttons">
+                <button id="end_ok_button" type="submit" style="background:none;border: none;">
+                  <span class="button_left"></span>
+                  <span class="button_mid">Ok</span>
+                  <span class="button_right"></span>
+                </button>
+                <a class="allbutton" id="end_cancel_button" >
+                  <span class="button_left"></span>
+                  <span class="button_mid">Cancel</span>
+                  <span class="button_right"></span>
+                </a>
+              </div>
+            </div>
+          <%end%>
         </div>
         <div id="end_btn_holder" style="cursor: pointer;left: 1013px;position: absolute;top: 606px;">
           <a class="allbutton" id="end_current_session">
@@ -301,46 +324,53 @@
             <span class="button_right"></span>
           </a>
         </div>
+        <div id="devicePanelContainer"></div>
+        <div>
+          <input id="closeButton" type="button" onclick="closePanel()" value="Close panel" style="visibility:hidden">
+        </div>
       </div>
     </div>
-<%#*<script type="text/javascript">%>
-<%#*$(document).ready(function(){%>
-<%#*$('#scrollbar1').tinyscrollbar();%>
-<%#*});%>
-<%#*</script>%>
-<%#*<script>%>
-<%#*$('#end_current_session').click(function(e) {%>
-<%#*jQuery.fn.center = function () {%>
-<%#*this.css("position","absolute");%>
-<%#*this.css("top", ( jQuery(window).height() - this.height()-100 ) / 2+jQuery(window).scrollTop() + "px");%>
-<%#*this.css("left", ( jQuery(window).width() - this.width() ) / 2+jQuery(window).scrollLeft() + "px");%>
-<%#*return this;%>
-<%#*}%>
-<%#*$('#end_session-modal').center();%>
-<%#*$('#end_session-modal').css('display','block');%>
-<%#*$('.overlay').css('display','block');%>
-<%#*$('.overlay').click(function(){%>
-<%#*$('#end_session-modal').css('display','none');%>
-<%#*$('.overlay').css('display','none')%>
-<%#*});%>
-<%#*//        jQuery.fn.center = function () {%>
-<%#*//            this.css("position","absolute");%>
-<%#*//            this.css("top", ( jQuery(window).height() - this.height() ) / 2+jQuery(window).scrollTop() + "px");%>
-<%#*//            this.css("left", ( jQuery(window).width() - this.width() ) / 2+jQuery(window).scrollLeft() + "px");%>
-<%#*//            return this;%>
-<%#*//        }%>
-<%#*//        $('#end_session-modal').center();%>
-<%#*//        $('#end_session-modal').css({%>
-<%#*//            'position':'fixed',%>
-<%#*//            'z-index':'4000'%>
-<%#*//        });%>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#scrollbar1').tinyscrollbar();
+      });
+    </script>
+    <script>
+      $('#end_current_session').click(function(e) {
+        abc();
+      });
+      $('#end_cancel_button').click(function(e) {
+        $('#end_session-modal').css('display', 'none');
+        $('.overlay').css('display', 'none')
+      });
 
+      function abc() {
+        jQuery.fn.center = function() {
+          this.css("position", "absolute");
+          this.css("top", (jQuery(window).height() - this.height() - 100) / 2 + jQuery(window).scrollTop() + "px");
+          this.css("left", (jQuery(window).width() - this.width()) / 2 + jQuery(window).scrollLeft() + "px");
+          return this;
+        }
+        $('#end_session-modal').center();
+        $('#end_session-modal').css('display', 'block');
+        $('.overlay').css('display', 'block');
+        $('.overlay').click(function() {
+          $('#end_session-modal').css('display', 'none');
+          $('.overlay').css('display', 'none')
+        });
+        //        jQuery.fn.center = function () {
+        //            this.css("position","absolute");
+        //            this.css("top", ( jQuery(window).height() - this.height() ) / 2+jQuery(window).scrollTop() + "px");
+        //            this.css("left", ( jQuery(window).width() - this.width() ) / 2+jQuery(window).scrollLeft() + "px");
+        //            return this;
+        //        }
+        //        $('#end_session-modal').center();
+        //        $('#end_session-modal').css({
+        //            'position':'fixed',
+        //            'z-index':'4000'
+        //        });
 
-<%#*});%>
-<%#*$('#end_cancel_button').click(function(e) {%>
-<%#*$('#end_session-modal').css('display','none');%>
-<%#*$('.overlay').css('display','none')%>
-<%#*});%>
-<%#*</script>%>
+      }
+    </script>
   </body>
 </html>

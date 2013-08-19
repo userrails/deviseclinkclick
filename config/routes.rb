@@ -5,6 +5,7 @@ TokboxApp::Application.routes.draw do
       get :student_room
       get :screen_share
       get :data_from_edupdu
+      get :send_live_session_status
     end
   end
   # The priority is based upon order of creation:

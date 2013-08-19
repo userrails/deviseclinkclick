@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'opentok'
 group :production do
-gem 'pg'
-gem 'therubyracer-heroku', '0.8.1.pre3'
+  gem 'pg'
+  gem 'therubyracer-heroku', '0.8.1.pre3'
 end
 
 # Bundle edge Rails instead:

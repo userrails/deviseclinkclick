@@ -3,9 +3,11 @@ class TokboxController < ApplicationController
   def mentor_room
     @tok_session_id = params[:session] if params[:session]
     @tok_token = params[:token] if params[:token]
+    @course_id = params[:course_id]
+    @course_topic_id = params[:course_topic_id]
     @course_topic_duration=params[:duration] if params[:duration]
     @course_name=params[:course].gsub(/-/," ") if params[:course]
-    @user_display_name=params[:user] if params[:user]
+    @user_display_name=params[:user].gsub(/-/," ") if params[:user]
     @course_topic_course_content=params[:course_topic].gsub(/-/," ") if params[:course_topic]
   end
   def student_room
@@ -28,5 +30,16 @@ class TokboxController < ApplicationController
     response = Typhoeus::Request.new("http://www.edupdu.com/sessions",method: :post)
     @json = response
   end
+  
+  def send_live_session_status
+    @course = params[:course]
+    @course_topic = params[:course_topic]
+    @status = params[:session_status]
+    respond_to do |format|
+      format.js
+    end
+  end
+  
+  
 
 end
