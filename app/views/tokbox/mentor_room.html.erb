@@ -294,6 +294,7 @@
             <div id="end_session-modal" class="shadow" style="position: fixed;z-index: 4000;">
               <%= hidden_field_tag :course,@course_id %>
               <%= hidden_field_tag :course_topic,@course_topic_id %>
+              <%= hidden_field_tag :user_account_id,@user_account_id %>
               <div id="break_session">
                 <%= radio_button_tag(:session_status,"session_break") %>
                 <span class="text_for_session">Break Session</span>

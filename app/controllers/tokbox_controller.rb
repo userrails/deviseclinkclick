@@ -8,11 +8,19 @@ class TokboxController < ApplicationController
     @course_topic_duration=params[:duration] if params[:duration]
     @course_name=params[:course].gsub(/-/," ") if params[:course]
     @user_display_name=params[:user].gsub(/-/," ") if params[:user]
+    @user_account_id = params[:user_account_id] 
     @course_topic_course_content=params[:course_topic].gsub(/-/," ") if params[:course_topic]
   end
   def student_room
     @tok_session_id = params[:session]
     @tok_token = params[:token]
+    @course_id = params[:course_id]
+    @course_topic_id = params[:course_topic_id]
+    @course_topic_duration = params[:duration] if params[:duration]
+    @course_name = params[:course].gsub(/-/," ") if params[:course]
+    @user_display_name = params[:user].gsub(/-/," ") if params[:user]
+    @user_account_id = params[:user_account_id] 
+    @course_topic_course_content = params[:course_topic].gsub(/-/," ") if params[:course_topic]
   end
   
   def screen_share
@@ -35,9 +43,15 @@ class TokboxController < ApplicationController
     @course = params[:course]
     @course_topic = params[:course_topic]
     @status = params[:session_status]
+    @user_account = params[:user_account_id]
     respond_to do |format|
       format.js
     end
+  end
+  
+  def send_student_live_status
+    redirect_to "http://edupdu.com/#{params[:param1]}/courses/#{params[:param]}/student_course_display"
+    
   end
   
   

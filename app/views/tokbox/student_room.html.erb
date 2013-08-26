@@ -75,13 +75,13 @@
     </script>
   </head>
   <body>
-    <div id="time_display">Duration: <%#= @course_topic.duration %></div>
+    <div id="time_display">Duration: <%= @course_topic_duration %></div>
     <div id="main_menu">
       <div id="left_corner"></div>
       <div id="mid_bg">
-        <span  id="main_menu_active" style="color:#89440c;font-size: 22px;"><%#= @course.name%></span>
-        <span id="course_by"><span class="live_by">Live by:</span><span class="mentor_name"><%#= @course.user.display_name %></span></span>
-        <span id="current_topic">Current topic:<%#= @course_topic.course_content %></span>
+        <span  id="main_menu_active" style="color:#89440c;font-size: 22px;"><%= @course_name%></span>
+        <span id="course_by"><span class="live_by">Live by:</span><span class="mentor_name"><%= @user_display_name %></span></span>
+        <span id="current_topic">Current topic:<%= @course_topic_course_content %></span>
       </div>
       <div id="right_corner"></div>
     </div>
@@ -89,11 +89,11 @@
       <div id="myPublisherDiv">
       </div>
     </div>
-    <%#*<div id="end_btn_holder" style="cursor: pointer;left: 523px;position: absolute;top: 603px;">%>
-      <%#= link_to "<span class=button_left></span><span class=button_mid>Quit Session</span><span class=button_right></span>".html_safe, student_course_display_course_path(:account_id =>current_user.account_id,:id=>@course) %>
-    <%#*</div>%>
-    <%#*<div id="subscribers" style="float: right;height: 379px;margin: 3px 103px;width: 485px;"></div>%>
-    <%# if @course_topic.session_status=="session_br" %>
+    <div id="end_btn_holder" style="cursor: pointer;left: 963px;position: absolute;top: 603px;">
+      <%= link_to "<span class=button_left></span><span class=button_mid>Quit Session</span><span class=button_right></span>".html_safe, send_student_live_status_tokbox_index_path(:param=>@course_id,:param1=>@user_account_id),:method => "GET",:confirm =>"Do you want to quite the live session?" %>
+    </div>
+    <div id="subscribers" style="float: right;height: 379px;margin: 3px 103px;width: 485px;"></div>
+    <%# if @course_topic.session_status=="session_break" %>
       <%#*<div class="overlay transparent"></div>%>
       <%#*<div id="notification-modal" style="height:auto;width: auto;">%>
         <%#*<span id="notification_msg">Lets take a break. Mentor will resumes the live course session after sometime.</span>%>
@@ -106,21 +106,5 @@
         <%#*</div>%>
       <%#*</div>%>
     <%#end%>
-    <%#*<script type="text/javascript">%>
-      <%#*$(document).ready(function(){%>
-        <%#*setInterval(function(){%>
-          <%#*$('#ajax_loader_big_div').remove();%>
-          <%#*var account='<%= current_user.account_id %>';%>
-          <%#*var id=<%= @course.id %>;%>
-          <%#*var course_topic=<%= @course_topic.id %>
-          <%#*jQuery.ajax({%>
-            <%#*url: "/courses/"+account+"/"+id+"/course_topics/"+course_topic+"/update_live_session",%>
-            <%#*success: function(data){%>
-
-            <%#*}%>
-          <%#*});%>
-        <%#*},3000);%>
-      <%#*});%>
-    <%#*</script>%>
-  </body>
+      </body>
 </html>
