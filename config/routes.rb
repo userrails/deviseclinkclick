@@ -1,14 +1,9 @@
 TokboxApp::Application.routes.draw do
-  resources :tokbox do
-    collection do
-      get :mentor_room
-      get :student_room
-      get :screen_share
-      get :data_from_edupdu
-      get :send_live_session_status
-      get :send_student_live_status
-    end
-  end
+  devise_for :users, controllers: { confirmations: 'confirmations' }
+
+  resources :teachers
+  resources :homes
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -58,7 +53,7 @@ TokboxApp::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => 'welcome#index'
+   root :to => 'homes#index'
 
   # See how all your routes lay out with "rake routes"
 

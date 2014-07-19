@@ -51,7 +51,6 @@ class TokboxController < ApplicationController
   
   def send_student_live_status
     redirect_to "http://edupdu.com/#{params[:param1]}/courses/#{params[:param]}/student_course_display"
-    
   end
   
   
